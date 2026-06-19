@@ -1,9 +1,6 @@
 /* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
 if (!process.env.__ALREADY_BOOTSTRAPPED_ENVS) require('dotenv').config();
 
-const fs = require('fs');
-const path = require('path');
 const { createServer } = require('@app-core/server');
 const { createConnection } = require('@app-core/mongoose');
 const { createQueue } = require('@app-core/queue');
@@ -16,29 +13,14 @@ const server = createServer({
   enableCors: true,
 });
 
-const ENDPOINT_CONFIGS = [
-  {
-    path: path.join(__dirname, 'endpoints', 'creator-cards'),
-  },
+// Register endpoints explicitly (no dynamic fs.readdirSync)
+const endpoints = [
+  require('./endpoints/creator-cards/create'),
+  require('./endpoints/creator-cards/get'),
+  require('./endpoints/creator-cards/delete'),
 ];
 
-function setupEndpointHandlers(dirPath, options = {}) {
-  const files = fs.readdirSync(dirPath);
-
-  files.forEach((file) => {
-    const handler = require(path.join(dirPath, file));
-
-    if (options.pathPrefix) {
-      handler.path = `${options.pathPrefix}${handler.path}`;
-    }
-
-    server.addHandler(handler);
-  });
-}
-
-ENDPOINT_CONFIGS.forEach((config) => {
-  setupEndpointHandlers(config.path, config.options);
-});
+endpoints.forEach((handler) => server.addHandler(handler));
 
 if (process.env.VERCEL) {
   // On Vercel: connect lazily on first request, then hand off to Express
