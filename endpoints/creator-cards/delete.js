@@ -1,5 +1,5 @@
-const { createHandler } = require('@app-core/server');
-const { throwAppError } = require('@app-core/errors');
+const { createHandler } = require('../../core/express');
+const { throwAppError } = require('../../core/errors');
 const deleteCreatorCard = require('../../services/creator-cards/delete');
 const messages = require('../../messages/creator-card');
 

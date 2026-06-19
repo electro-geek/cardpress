@@ -7,8 +7,8 @@ const expressEnums = require('./enums');
 
 function Server(serverConfig = {}) {
   const express = require('express');
-  const { appLogger } = require('@app-core/logger');
-  const { ERROR_STATUS_CODE_MAPPING } = require('@app-core/errors');
+  const { appLogger } = require('../logger');
+  const { ERROR_STATUS_CODE_MAPPING } = require('../errors');
   const cors = require('cors');
 
   const app = express();

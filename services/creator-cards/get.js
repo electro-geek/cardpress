@@ -1,4 +1,4 @@
-const { throwAppError } = require('@app-core/errors');
+const { throwAppError } = require('../../core/errors');
 const CreatorCard = require('../../models/creator-card');
 const messages = require('../../messages/creator-card');
 const { serializeCard } = require('./create');

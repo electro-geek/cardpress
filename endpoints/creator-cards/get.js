@@ -1,4 +1,4 @@
-const { createHandler } = require('@app-core/server');
+const { createHandler } = require('../../core/express');
 const getCreatorCard = require('../../services/creator-cards/get');
 const messages = require('../../messages/creator-card');
 
