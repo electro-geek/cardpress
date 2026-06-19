@@ -1,8 +1,5 @@
 require('dotenv').config();
-
 process.env.__ALREADY_BOOTSTRAPPED_ENVS = true;
 
-const app = require('./app');
-
-// Vercel expects the file to export the handler
-module.exports = app;
+// Re-export for Vercel (when used as serverless entry point)
+module.exports = require('./app');

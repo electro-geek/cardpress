@@ -7,10 +7,6 @@ const { createServer } = require('@app-core/server');
 const { createConnection } = require('@app-core/mongoose');
 const { createQueue } = require('@app-core/queue');
 
-createConnection({
-  uri: process.env.MONGODB_URI,
-});
-
 createQueue();
 
 const server = createServer({
@@ -43,9 +39,19 @@ ENDPOINT_CONFIGS.forEach((config) => {
   setupEndpointHandlers(config.path, config.options);
 });
 
-// On Vercel (serverless), export the handler instead of starting a listener
 if (process.env.VERCEL) {
-  module.exports = server.executeRequest;
+  // On Vercel: connect lazily on first request, then hand off to Express
+  const handler = async (req, res) => {
+    await createConnection({ uri: process.env.MONGODB_URI });
+    return server.executeRequest(req, res);
+  };
+  module.exports = handler;
 } else {
-  server.startServer();
+  // Local / Heroku / Render: connect then start server
+  createConnection({ uri: process.env.MONGODB_URI })
+    .then(() => server.startServer())
+    .catch((err) => {
+      console.error('Failed to connect to MongoDB, exiting.', err.message);
+      process.exit(1);
+    });
 }
