@@ -2,25 +2,16 @@
   "name": "cardpress",
   "version": "1.0.0",
   "description": "Creator Card microservice API",
-  "main": "app.js",
+  "main": "bootstrap.js",
   "type": "commonjs",
   "scripts": {
     "start": "node bootstrap.js",
     "dev": "node bootstrap.js"
   },
-  "_moduleAliases": {
-    "@app-core/errors": "./core/errors",
-    "@app-core/logger": "./core/logger",
-    "@app-core/mongoose": "./core/mongoose",
-    "@app-core/queue": "./core/queue",
-    "@app-core/randomness": "./core/randomness",
-    "@app-core/server": "./core/express"
-  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "module-alias": "^2.2.3",
     "mongoose": "^8.5.1",
     "request-ip": "^3.3.0",
     "ulid": "^2.3.0"

@@ -1,5 +1,5 @@
-const { throwAppError } = require('@app-core/errors');
-const { ulid, randomAlphanumeric } = require('@app-core/randomness');
+const { throwAppError } = require('../../core/errors');
+const { ulid, randomAlphanumeric } = require('../../core/randomness');
 const CreatorCard = require('../../models/creator-card');
 const messages = require('../../messages/creator-card');
 
