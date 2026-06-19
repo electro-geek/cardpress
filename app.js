@@ -3,6 +3,7 @@
 if (!process.env.__ALREADY_BOOTSTRAPPED_ENVS) require('dotenv').config();
 
 const fs = require('fs');
+const path = require('path');
 const { createServer } = require('@app-core/server');
 const { createConnection } = require('@app-core/mongoose');
 const { createQueue } = require('@app-core/queue');
@@ -17,15 +18,15 @@ const server = createServer({
 
 const ENDPOINT_CONFIGS = [
   {
-    path: './endpoints/creator-cards/',
+    path: path.join(__dirname, 'endpoints', 'creator-cards'),
   },
 ];
 
-function setupEndpointHandlers(basePath, options = {}) {
-  const dirs = fs.readdirSync(basePath);
+function setupEndpointHandlers(dirPath, options = {}) {
+  const files = fs.readdirSync(dirPath);
 
-  dirs.forEach((file) => {
-    const handler = require(`${basePath}${file}`);
+  files.forEach((file) => {
+    const handler = require(path.join(dirPath, file));
 
     if (options.pathPrefix) {
       handler.path = `${options.pathPrefix}${handler.path}`;
@@ -47,7 +48,7 @@ if (process.env.VERCEL) {
   };
   module.exports = handler;
 } else {
-  // Local / Heroku / Render: connect then start server
+  // Local / Render: connect then start server
   createConnection({ uri: process.env.MONGODB_URI })
     .then(() => server.startServer())
     .catch((err) => {
