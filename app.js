@@ -43,4 +43,9 @@ ENDPOINT_CONFIGS.forEach((config) => {
   setupEndpointHandlers(config.path, config.options);
 });
 
-server.startServer();
+// On Vercel (serverless), export the handler instead of starting a listener
+if (process.env.VERCEL) {
+  module.exports = server.executeRequest;
+} else {
+  server.startServer();
+}
